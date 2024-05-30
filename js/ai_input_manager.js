@@ -155,7 +155,7 @@ AIInputManager.prototype.nextMove = function() {
     // Call nextMove continuously when in full speed.
     // Call this function again on a timeout so the browser
     // has a chance to update the screen
-    this.nextMove.bind(this);
+    setTimeout(this.nextMove.bind(this));
   }
   if (this.prevStates.length >= this.stateBufferSize) {
     this.prevStates.shift();
