@@ -26,32 +26,34 @@ function throttle (func, limit) {
   };
 }
 
-HTMLActuator.prototype.actuate = throttle(function (grid, metadata) {
+HTMLActuator.prototype.actuate = function (grid, metadata) {
 
-  window.requestAnimationFrame(() => {
-    this.clearContainer(this.tileContainer);
+  var self = this;
+
+  window.requestAnimationFrame(function () {
+    self.clearContainer(this.tileContainer);
 
     grid.cells.forEach(function (column) {
       column.forEach(function (cell) {
         if (cell) {
-          this.addTile(cell);
+          self.addTile(cell);
         }
       });
     });
 
-    this.updateScore(metadata.score);
-    this.updateBestScore(metadata.bestScore);
+    self.updateScore(metadata.score);
+    self.updateBestScore(metadata.bestScore);
 
     if (metadata.terminated) {
       if (metadata.over) {
-        this.message(false); // You lose
+        self.message(false); // You lose
       } else if (metadata.won) {
-        this.message(true); // You win!
+        self.message(true); // You win!
       }
     }
 
   });
-}, 1);
+};
 
 // Continues the game (both restart and keep playing)
 HTMLActuator.prototype.continueGame = function () {
