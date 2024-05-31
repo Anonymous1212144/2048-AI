@@ -7,7 +7,26 @@ function HTMLActuator() {
   this.score = 0;
 }
 
-HTMLActuator.prototype.actuate = function (grid, metadata) {
+function throttle (func, limit) {
+  let lastFunc;
+  let lastRan;
+  return function(...args) {
+    if (!lastRan) {
+      func.apply(this, args);
+      lastRan = Date.now();
+    } else {
+      clearTimeout(lastFunc);
+      lastFunc = setTimeout(function() {
+        if ((Date.now() - lastRan) >= limit) {
+          func.apply(this,args);
+          lastRan = Date.now();
+        }
+      }, limit - (Date.now() - lastRan));
+    }
+  };
+}
+
+HTMLActuator.prototype.actuate = throttle(function (grid, metadata) {
   var self = this;
 
   window.requestAnimationFrame(function () {
@@ -33,7 +52,7 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
     }
 
   });
-};
+}, 1);
 
 // Continues the game (both restart and keep playing)
 HTMLActuator.prototype.continueGame = function () {
