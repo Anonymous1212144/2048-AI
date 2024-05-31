@@ -151,11 +151,6 @@ AIInputManager.prototype.nextMove = function() {
       self.emit("restart");
       self.startAI();
     }, 5000);
-  } else if (this.speed == AISpeed.FULL && this.runningAI) {
-    // Call nextMove continuously when in full speed.
-    // Call this function again on a timeout so the browser
-    // has a chance to update the screen
-    setTimeout(this.nextMove.bind(this));
   }
   if (this.prevStates.length >= this.stateBufferSize) {
     this.prevStates.shift();
@@ -167,7 +162,7 @@ AIInputManager.prototype.startAI = function() {
   this.runningAI = true;
   switch (this.speed) {
     case AISpeed.FULL:
-      setTimeout(this.nextMove.bind(this));
+      setInterval(this.nextMove.bind(this));
       break;
     case AISpeed.FAST:
       this.aiID = setInterval(this.nextMove.bind(this), this.fastMoveTime);
