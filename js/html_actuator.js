@@ -27,27 +27,26 @@ function throttle (func, limit) {
 }
 
 HTMLActuator.prototype.actuate = throttle(function (grid, metadata) {
-  var self = this;
 
-  window.requestAnimationFrame(function () {
-    self.clearContainer(self.tileContainer);
+  window.requestAnimationFrame(() => {
+    this.clearContainer(this.tileContainer);
 
     grid.cells.forEach(function (column) {
       column.forEach(function (cell) {
         if (cell) {
-          self.addTile(cell);
+          this.addTile(cell);
         }
       });
     });
 
-    self.updateScore(metadata.score);
-    self.updateBestScore(metadata.bestScore);
+    this.updateScore(metadata.score);
+    this.updateBestScore(metadata.bestScore);
 
     if (metadata.terminated) {
       if (metadata.over) {
-        self.message(false); // You lose
+        this.message(false); // You lose
       } else if (metadata.won) {
-        self.message(true); // You win!
+        this.message(true); // You win!
       }
     }
 
