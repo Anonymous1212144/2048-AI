@@ -10,7 +10,7 @@ function HTMLActuator() {
 var lastRan = Date.now();
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
-  if ((Date.now() - lastRan) < 2) {
+  if ((Date.now() - lastRan) < 10) {
     return;
   }
   lastRan = Date.now();
