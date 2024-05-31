@@ -1,12 +1,3 @@
-function HTMLActuator() {
-  this.tileContainer    = document.querySelector(".tile-container");
-  this.scoreContainer   = document.querySelector(".score-container");
-  this.bestContainer    = document.querySelector(".best-container");
-  this.messageContainer = document.querySelector(".game-message");
-
-  this.score = 0;
-}
-
 function throttle (func, limit) {
   let lastFunc;
   let lastRan;
@@ -26,8 +17,16 @@ function throttle (func, limit) {
   };
 }
 
-HTMLActuator.prototype.actuate = function (grid, metadata) {
+function HTMLActuator() {
+  this.tileContainer    = document.querySelector(".tile-container");
+  this.scoreContainer   = document.querySelector(".score-container");
+  this.bestContainer    = document.querySelector(".best-container");
+  this.messageContainer = document.querySelector(".game-message");
 
+  this.score = 0;
+}
+
+HTMLActuator.prototype.actuate = function (grid, metadata) {
   var self = this;
 
   window.requestAnimationFrame(function () {
