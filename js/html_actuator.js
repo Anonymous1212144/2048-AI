@@ -13,7 +13,6 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
   if ((Date.now() - lastRan) < 10) {
     return;
   }
-  lastRan = Date.now();
   
   var self = this;
 
@@ -40,6 +39,7 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
     }
 
   });
+  lastRan = Date.now();
 };
 
 // Continues the game (both restart and keep playing)
