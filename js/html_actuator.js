@@ -8,9 +8,11 @@ function HTMLActuator() {
 }
 
 var lastRan = Date.now();
+var lastCalled = Date.now();
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
-  if (!metadata.over && Date.now() - lastRan < 100) {
+  lastCalled = Date.now();
+  if (!metadata.over && Date.now() - lastRan < 10) {
     return;
   }
   
@@ -57,7 +59,7 @@ HTMLActuator.prototype.clearContainer = function (container) {
   }
 };
 
-HTMLActuator.prototype.addTile = function (tile) {
+HTMLActuator.prototype.addTile = function (tile, skip=false) {
   var self = this;
 
   var wrapper   = document.createElement("div");
@@ -74,8 +76,8 @@ HTMLActuator.prototype.addTile = function (tile) {
 
   inner.classList.add("tile-inner");
   inner.textContent = tile.value;
-
-  if (tile.previousPosition) {
+  
+  if (tile.previousPosition && !skip) {
     // Make sure that the tile gets rendered in the previous position first
     window.requestAnimationFrame(function () {
       classes[2] = self.positionClass({ x: tile.x, y: tile.y });
