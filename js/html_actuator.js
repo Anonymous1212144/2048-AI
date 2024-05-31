@@ -25,7 +25,7 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
       column.forEach(function (cell) {
         if (cell) {
           if (lastCalled < 10) {
-            self.addTile(cell);
+            self.addTile(cell, true);
           } else {
             self.addTile(cell);
           }
