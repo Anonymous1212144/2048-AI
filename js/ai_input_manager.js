@@ -162,7 +162,9 @@ AIInputManager.prototype.startAI = function() {
   this.runningAI = true;
   switch (this.speed) {
     case AISpeed.FULL:
-      this.aiID = setInterval(this.nextMove.bind(this));
+      while (this.runningAI) {
+        this.nextMove.bind(this)
+      }
       break;
     case AISpeed.FAST:
       this.aiID = setInterval(this.nextMove.bind(this), this.fastMoveTime);
