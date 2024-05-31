@@ -1,22 +1,3 @@
-function throttle (func, limit) {
-  let lastFunc;
-  let lastRan;
-  return function(...args) {
-    if (!lastRan) {
-      func.apply(this, args);
-      lastRan = Date.now();
-    } else {
-      clearTimeout(lastFunc);
-      lastFunc = setTimeout(function() {
-        if ((Date.now() - lastRan) >= limit) {
-          func.apply(this,args);
-          lastRan = Date.now();
-        }
-      }, limit - (Date.now() - lastRan));
-    }
-  };
-}
-
 function HTMLActuator() {
   this.tileContainer    = document.querySelector(".tile-container");
   this.scoreContainer   = document.querySelector(".score-container");
@@ -26,7 +7,14 @@ function HTMLActuator() {
   this.score = 0;
 }
 
-HTMLActuator.prototype.E = function (grid, metadata) {
+var lastRan = Date.now();
+
+HTMLActuator.prototype.actuate = function (grid, metadata) {
+  if ((Date.now() - lastRan) < 1000) {
+    return;
+  }
+  lastRan = Date.now();
+  
   var self = this;
 
   window.requestAnimationFrame(function () {
@@ -53,8 +41,6 @@ HTMLActuator.prototype.E = function (grid, metadata) {
 
   });
 };
-
-HTMLActuator.prototype.actuate = throttle(HTMLActuator.prototype.E, 1000);
 
 // Continues the game (both restart and keep playing)
 HTMLActuator.prototype.continueGame = function () {
