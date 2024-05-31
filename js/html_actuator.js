@@ -26,7 +26,7 @@ function HTMLActuator() {
   this.score = 0;
 }
 
-HTMLActuator.prototype.actuate = function (grid, metadata) {
+HTMLActuator.prototype.actuate = throttle(function (grid, metadata) {
   var self = this;
 
   window.requestAnimationFrame(function () {
@@ -52,7 +52,7 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
     }
 
   });
-};
+}, 1000);
 
 // Continues the game (both restart and keep playing)
 HTMLActuator.prototype.continueGame = function () {
