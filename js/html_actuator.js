@@ -24,7 +24,11 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
     grid.cells.forEach(function (column) {
       column.forEach(function (cell) {
         if (cell) {
-          self.addTile(cell);
+          if (lastCalled < 10) {
+            self.addTile(cell);
+          } else {
+            self.addTile(cell);
+          }
         }
       });
     });
