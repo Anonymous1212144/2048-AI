@@ -50,7 +50,7 @@ SmartAI.prototype.nextMove = function() {
   //var bestResult = this.chooseBestMove(results, originalQuality);
   
   //return bestResult.direction;
-  return this.chooseBestMove2(this.game.grid, 3);
+  return this.chooseBestMove2(this.game.grid, 5);
 };
 
 SmartAI.prototype.chooseBestMove2 = function(grid, numMoves) {
@@ -62,9 +62,6 @@ SmartAI.prototype.chooseBestMove2 = function(grid, numMoves) {
     if (!testGame.moveTiles(d)) {continue;}
     if (direction == -1) {direction = d;}
     var value2 = this.planAhead(testGrid, numMoves, -Infinity, Infinity, false);
-    if (value2 == -Infinity) {
-      this.planAhead(testGrid, numMoves, -Infinity, Infinity, false, true);
-    }
     if (value2 > value) {
       direction = d;
       value = value2;
@@ -80,8 +77,7 @@ SmartAI.prototype.planAhead = function(grid, numMoves, alpha, beta, maximizing, 
     console.log(game.movesAvailable());
     console.log(this.gridQuality(grid));
   }
-  if (!game.movesAvailable()) {return this.gridQuality(grid);}
-  if (numMoves == 0) {return this.gridQuality(grid);}
+  if (!game.movesAvailable() || numMoves == 0) {return this.gridQuality(grid);}
   var availableCells = grid.availableCells();
   if (maximizing) {
     value = -Infinity;
@@ -291,11 +287,10 @@ SmartAI.prototype.gridQuality = function(grid) {
   
   var scoreCell = function(cell) {
     var tile = grid.cellContent(cell);
-    var tileValue = (tile ? tile.value : 0);
+    var tileValue = (tile ? Math.log2(tile.value) : 0);
     if (tileValue == 0) {
       emptyScore++;
     } else {
-      tileValue = Math.log2(tileValue);
       sumScore += Math.pow(tileValue, 3.5);
       if (prevMerge == tileValue) {
         counter++;
