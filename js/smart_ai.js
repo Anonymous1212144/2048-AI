@@ -61,9 +61,9 @@ SmartAI.prototype.chooseBestMove2 = function(grid, numMoves) {
     var testGame = new GameController(testGrid);
     if (!testGame.moveTiles(d)) {continue;}
     if (direction == -1) {direction = d;}
-    var value2 = this.planAhead(testGrid, 3, -200000, 200000, false);
+    var value2 = this.planAhead(testGrid, numMoves, -Infinity, Infinity, false);
     if (value2 == -200000) {
-      this.planAhead(testGrid, 3, -200000, 200000, false, true);
+      this.planAhead(testGrid, numMoves, -Infinity, Infinity, false, true);
     }
     if (value2 > value) {
       direction = d;
@@ -80,11 +80,11 @@ SmartAI.prototype.planAhead = function(grid, numMoves, alpha, beta, maximizing, 
     console.log(game.movesAvailable());
     console.log(this.gridQuality(grid));
   }
-  if (!game.movesAvailable()) {return -200000;}
+  if (!game.movesAvailable()) {return -Infinity;}
   if (numMoves == 0) {return this.gridQuality(grid);}
   var availableCells = grid.availableCells();
   if (maximizing) {
-    value = -200000;
+    value = -Infinity;
     for (var d = 0; d < 4; d++) {
       var testGrid = grid.clone();
       var testGame = new GameController(testGrid);
@@ -95,7 +95,7 @@ SmartAI.prototype.planAhead = function(grid, numMoves, alpha, beta, maximizing, 
     }
     return value;
   } else {
-    value = 200000;
+    value = Infinity;
     for (var i = 0; i < availableCells.length; i++) {
       var testGrid = grid.clone();
       var testGame = new GameController(testGrid);
@@ -335,7 +335,7 @@ SmartAI.prototype.gridQuality = function(grid) {
     monoScore += Math.min(incScore, decScore);
   });
 
-  if (emptyScore == 0 && mergeScore == 0) {return -200000;}
+  if (emptyScore == 0 && mergeScore == 0) {return -Infinity;}
   var score = -47*monoScore + 270*emptyScore + 700*mergeScore;
   return score;
 }
