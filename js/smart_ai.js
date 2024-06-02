@@ -44,17 +44,73 @@ SmartAI.prototype.nextMove = function() {
   
   // Plan ahead a few moves in every direction and analyze the board state.
   // Go for moves that put the board in a better state.
-  var originalQuality = this.gridQuality(this.game.grid);
-  var results = this.planAhead(this.game.grid, 3, originalQuality);
+  //var originalQuality = this.gridQuality(this.game.grid);
+  //var results = this.planAhead(this.game.grid, 3, originalQuality);
   // Choose the best result
-  var bestResult = this.chooseBestMove(results, originalQuality);
+  //var bestResult = this.chooseBestMove(results, originalQuality);
   
-  return bestResult.direction;
+  //return bestResult.direction;
+  return this.chooseBestMove2(this.game.grid, 3);
 };
+
+SmartAI.prototype.chooseBestMove2 = function(grid, numMoves) {
+  var value = -200000;
+  var direction = 0;
+  for (var d = 0; d < 4; d++) {
+    var testGrid = grid.clone();
+    var testGame = new GameController(testGrid);
+    if (!testGame.moveTiles(d)) {continue;}
+    var value2 = this.planAhead(testGrid, 3, -200000, 200000, false);
+    if (value2 > value) {
+      direction = d;
+      value = value2;
+    }
+  }
+  return direction;
+}
+
+SmartAI.prototype.planAhead = function(grid, numMoves, alpha, beta, maximizing) {
+  var game = new GameController(grid);
+  if (!game.movesAvailable()) {return -200000;}
+  if (numMoves == 0) {return this.gridQuality(grid);}
+  var availableCells = grid.availableCells();
+  if (maximizing) {
+    value = -200000;
+    for (var d = 0; d < 4; d++) {
+      var testGrid = grid.clone();
+      var testGame = new GameController(testGrid);
+      if (!testGame.moveTiles(d)) {continue;}
+      value = Math.max(value, this.planAhead(testGrid, numMoves-1, alpha, beta, maximizing, false));
+      if (value > beta) {break;}
+      alpha = Math.max(alpha, value);
+    }
+    return value;
+  else {
+    value = 200000;
+    for (var i = 0; i < availableCells.length; i++) {
+      var testGrid = grid.clone();
+      var testGame = new GameController(testGrid);
+      testGame.addTile(new Tile(availableCells[i], 2));
+      value = Math.min(value, this.planAhead(testGrid, numMoves-1, alpha, beta, maximizing, true));
+      if (value < alpha) {break;}
+      beta = Math.min(beta, value);
+
+      var testGrid = grid.clone();
+      var testGame = new GameController(testGrid);
+      testGame.addTile(new Tile(availableCells[i], 4));
+      value = Math.min(value, this.planAhead(testGrid, numMoves-1, alpha, beta, maximizing, true));
+      if (value < alpha) {break;}
+      beta = Math.min(beta, value);
+    }
+    return value;
+  }
+}
+      
+      
 
 // Plans a few moves ahead and returns the worst-case scenario grid quality,
 // and the probability of that occurring, for each move
-SmartAI.prototype.planAhead = function(grid, numMoves, originalQuality) {
+SmartAI.prototype.planAhead2 = function(grid, numMoves, originalQuality) {
   var results = new Array(4);
   
   // Try each move and see what happens.
@@ -214,6 +270,7 @@ SmartAI.prototype.gridQuality = function(grid) {
    *   ___  128  ___  32
    *         +0      +32
    */
+  if (!(this.grid.cellsAvailable() || this.tileMatchesAvailable())) {return -200000;}
   var monoScore = 0; // monoticity score
   var traversals = this.game.buildTraversals({x: -1, y:  0});
   var prevValue = -1;
@@ -271,6 +328,7 @@ SmartAI.prototype.gridQuality = function(grid) {
   });
   
   var score = -47*monoScore + 270*emptyScore + 700*mergeScore;
+  if (emptyScore == 0 && mergeScore == 0) {score -= 200000;}
   return score;
 }
 
