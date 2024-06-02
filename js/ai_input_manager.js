@@ -158,11 +158,18 @@ AIInputManager.prototype.nextMove = function() {
   this.prevStates.push(this.game.grid.serialize());
 }
 
+AIInputManager.prototype.fullSpeed = function () {
+  var start = Date.now();
+  while (Date.now() - start < 1 && !this.game.over) {
+    this.nextMove.bind(this)
+  }
+}
+
 AIInputManager.prototype.startAI = function() {
   this.runningAI = true;
   switch (this.speed) {
     case AISpeed.FULL:
-      this.aiID = setInterval(this.nextMove.bind(this));
+      this.aiID = setInterval(this.fullSpeed(), 1);
       break;
     case AISpeed.FAST:
       this.aiID = setInterval(this.nextMove.bind(this), this.fastMoveTime);
