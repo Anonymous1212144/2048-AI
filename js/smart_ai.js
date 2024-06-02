@@ -105,12 +105,12 @@ SmartAI.prototype.planAhead = function(grid, numMoves, alpha, beta, maximizing) 
       if (value < alpha) {break;}
       beta = Math.min(beta, value);
 
-      testGrid = grid.clone();
-      testGame = new GameController(testGrid);
-      testGame.addTile(new Tile(availableCells[i], 4));
-      value = Math.min(value, this.planAhead(testGrid, numMoves-1, alpha, beta, true));
-      if (value < alpha) {break;}
-      beta = Math.min(beta, value);
+      //testGrid = grid.clone();
+      //testGame = new GameController(testGrid);
+      //testGame.addTile(new Tile(availableCells[i], 4));
+      //value = Math.min(value, this.planAhead(testGrid, numMoves-1, alpha, beta, true));
+      //if (value < alpha) {break;}
+      //beta = Math.min(beta, value);
     }
     return value;
   }
