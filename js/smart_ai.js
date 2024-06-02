@@ -187,8 +187,8 @@ SmartAI.prototype.gridQuality = function(grid) {
   var traversals = this.game.buildTraversals({x: -1, y:  0});
   var prevValue = -1;
   var incScore = 0, decScore = 0;
+  var prevMerge = -1;
   var emptyScore = 0;
-  var prevMerge = -1
   var mergeScore = 0;
   
   var scoreCell = function(cell) {
@@ -219,6 +219,7 @@ SmartAI.prototype.gridQuality = function(grid) {
   // Traverse each column
   traversals.x.forEach(function (x) {
     prevValue = -1;
+    prevMerge = -1;
     incScore = 0;
     decScore = 0;
     traversals.y.forEach(function (y) {
@@ -229,6 +230,7 @@ SmartAI.prototype.gridQuality = function(grid) {
   // Traverse each row
   traversals.y.forEach(function (y) {
     prevValue = -1;
+    prevMerge = -1;
     incScore = 0;
     decScore = 0;
     traversals.x.forEach(function (x) {
