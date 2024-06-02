@@ -192,6 +192,14 @@ AIInputManager.prototype.nextMove2 = function() {
     this.prevStates.shift();
   }
   this.prevStates.push(this.game.grid.serialize());
+  if (!this.game.over) {
+    move = this.ai.nextMove();
+    this.emit("move", move);
+    if (this.prevStates.length >= this.stateBufferSize) {
+      this.prevStates.shift();
+    }
+    this.prevStates.push(this.game.grid.serialize());
+  }
 }
 
 AIInputManager.prototype.startAI = function() {
