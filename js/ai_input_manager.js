@@ -172,7 +172,7 @@ AIInputManager.prototype.nextMove2 = function() {
     this.setAIMode(this.mode);
   var inputStarted = Date.now();
 
-  while (Date.now() != inputStarted) {
+  while (Date.now() == inputStarted) {
     var move = this.ai.nextMove();
     this.emit("move", move);
 
