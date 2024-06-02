@@ -161,7 +161,7 @@ AIInputManager.prototype.nextMove = function() {
 AIInputManager.prototype.fullSpeed = function () {
   var start = Date.now();
   while (Date.now() - start < 10 && !this.game.over) {
-    this.nextMove.bind(this)
+    this.nextMove.bind(this);
   }
 }
 
@@ -169,7 +169,7 @@ AIInputManager.prototype.startAI = function() {
   this.runningAI = true;
   switch (this.speed) {
     case AISpeed.FULL:
-      this.aiID = setInterval(this.fullSpeed(), 10);
+      this.aiID = setInterval(this.fullSpeed.bind(this), 10);
       break;
     case AISpeed.FAST:
       this.aiID = setInterval(this.nextMove.bind(this), this.fastMoveTime);
