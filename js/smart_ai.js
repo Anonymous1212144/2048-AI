@@ -286,6 +286,8 @@ SmartAI.prototype.gridQuality = function(grid) {
   var prevMerge = -1;
   var emptyScore = 0;
   var mergeScore = 0;
+  var sumScore = 0;
+  var counter = 0;
   
   var scoreCell = function(cell) {
     var tile = grid.cellContent(cell);
@@ -293,12 +295,15 @@ SmartAI.prototype.gridQuality = function(grid) {
     if (tileValue == 0) {
       emptyScore++;
     } else {
+      tileValue = Math.log2(tileValue);
+      sumScore += Math.pow(tileValue, 3.5);
       if (prevMerge == tileValue) {
-        mergeScore += 1;
-        prevMerge = -1;
-      } else {
-        prevMerge = tileValue;
+        counter++;
+      } else if (counter > 0) {
+        mergeScore += 1+counter;
+        counter = 0;
       }
+      prevMerge = tileValue;
     }
     if (prevValue == -1) {
       prevValue = tileValue;
@@ -318,25 +323,29 @@ SmartAI.prototype.gridQuality = function(grid) {
     prevMerge = -1;
     incScore = 0;
     decScore = 0;
+    counter = 0;
     traversals.y.forEach(function (y) {
       scoreCell({ x: x, y: y });
     });
     monoScore += Math.min(incScore, decScore);
   });
+  if (counter > 0) {mergeScore += 1+counter;}
   // Traverse each row
   traversals.y.forEach(function (y) {
     prevValue = -1;
     prevMerge = -1;
     incScore = 0;
     decScore = 0;
+    counter = 0;
     traversals.x.forEach(function (x) {
       scoreCell({ x: x, y: y });
     });
     monoScore += Math.min(incScore, decScore);
   });
+  if (counter > 0) {mergeScore += 1+counter;}
 
   
-  var score = -47*monoScore + 270*emptyScore + 700*mergeScore;
+  var score = -47*monoScore + 270*emptyScore + 700*mergeScore - 11*sumScore;
   //var score = -47*monoScore + 270*emptyScore;
   if (emptyScore == 0 && mergeScore == 0) {score -= 200000;}
   return score;
