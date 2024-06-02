@@ -7,13 +7,8 @@ function HTMLActuator() {
   this.score = 0;
 }
 
-//var lastRan = Date.now();
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
-  //if (!metadata.over && Date.now() - lastRan < 10) {
-  //  return;
-  //}
-  
   var self = this;
 
   window.requestAnimationFrame(function () {
@@ -39,7 +34,6 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
     }
 
   });
-  lastRan = Date.now();
 };
 
 // Continues the game (both restart and keep playing)
