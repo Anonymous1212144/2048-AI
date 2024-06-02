@@ -176,6 +176,11 @@ AIInputManager.prototype.nextMove2 = function() {
     var move = this.ai.nextMove();
     this.emit("move", move);
 
+    if (this.prevStates.length >= this.stateBufferSize) {
+      this.prevStates.shift();
+    }
+    this.prevStates.push(this.game.grid.serialize());
+
     // If the game is over, do a longer wait and start again.
     if (this.game.over) {
       // Update stats
@@ -188,10 +193,7 @@ AIInputManager.prototype.nextMove2 = function() {
       }, 5000);
       break;
     }
-    if (this.prevStates.length >= this.stateBufferSize) {
-      this.prevStates.shift();
-    }
-    this.prevStates.push(this.game.grid.serialize());
+    
   }
 
   if (!this.game.over && this.runningAI) {
