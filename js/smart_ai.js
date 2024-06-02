@@ -120,8 +120,39 @@ SmartAI.prototype.planAhead = function(grid, numMoves, originalQuality) {
         result.probability += tileResult.probability / availableCells.length;
       }
       result.qualityLoss += tileResult.qualityLoss / availableCells.length;
+      
+      testGrid2 = testGrid.clone();
+      testGame2 = new GameController(testGrid2);
+      testGame2.addTile(new Tile(availableCells[i], 4));
+      if (numMoves > 1) {
+        var subResults2 = this.planAhead(testGrid2, numMoves - 1, originalQuality);
+        // Choose the sub-result with the BEST quality since that is the direction
+        // that would be chosen in that case.
+        tileResult = this.chooseBestMove(subResults, originalQuality);
+      } else {
+        var tileQuality2 = this.gridQuality(testGrid2);
+        tileResult = {
+          quality: tileQuality,
+          probability: 1,
+          qualityLoss: Math.max(originalQuality - tileQuality, 0)
+        };
+      }
+      // Compare this grid quality to the grid quality for other tile spawn locations.
+      // Take the WORST quality since we have no control over where the tile spawns,
+      // so assume the worst case scenario.
+      if (result.quality == -1 || tileResult.quality < result.quality) {
+        result.quality = tileResult.quality;
+        result.probability = tileResult.probability / availableCells.length;
+      } else if (tileResult.quality == result.quality) {
+        result.probability += tileResult.probability / availableCells.length;
+      }
+      result.qualityLoss += tileResult.qualityLoss / availableCells.length;
+      
     }
     results[d] = result;
+
+    
+    
   }
   return results;
 }
