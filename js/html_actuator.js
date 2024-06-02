@@ -7,12 +7,12 @@ function HTMLActuator() {
   this.score = 0;
 }
 
-var lastRan = Date.now();
+//var lastRan = Date.now();
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
-  if (!metadata.over && Date.now() - lastRan < 10) {
-    return;
-  }
+  //if (!metadata.over && Date.now() - lastRan < 10) {
+  //  return;
+  //}
   
   var self = this;
 
