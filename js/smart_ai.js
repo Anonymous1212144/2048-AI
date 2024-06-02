@@ -99,12 +99,12 @@ SmartAI.prototype.planAhead = function(grid, numMoves, alpha, beta, maximizing) 
       
       var hasAdjacentTile = false;
       for (var d2 = 0; d2 < 4; d2++) {
-        var vector = testGame.getVector(d2);
+        var vector = game.getVector(d2);
         var adjCell = {
           x: availableCells[i].x + vector.x,
           y: availableCells[i].y + vector.y,
         };
-        if (testGrid.cellContent(adjCell)) {
+        if (grid.cellContent(adjCell)) {
           hasAdjacentTile = true;
           break;
         }
