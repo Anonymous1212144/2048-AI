@@ -85,7 +85,7 @@ SmartAI.prototype.planAhead = function(grid, numMoves, alpha, beta, maximizing) 
       alpha = Math.max(alpha, value);
     }
     return value;
-  else {
+  } else {
     value = 200000;
     for (var i = 0; i < availableCells.length; i++) {
       var testGrid = grid.clone();
