@@ -336,9 +336,9 @@ SmartAI.prototype.gridQuality = function(grid) {
   });
 
   
-  //var score = -47*monoScore + 270*emptyScore + 700*mergeScore;
-  var score = -47*monoScore + 270*emptyScore;
-  if (emptyScore == 0 && mergeScore == 0) {score -= 1e12;}
+  var score = -47*monoScore + 270*emptyScore + 700*mergeScore;
+  //var score = -47*monoScore + 270*emptyScore;
+  if (emptyScore == 0 && mergeScore == 0) {score -= 200000;}
   return score;
 }
 
