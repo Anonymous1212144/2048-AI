@@ -270,7 +270,6 @@ SmartAI.prototype.gridQuality = function(grid) {
    *   ___  128  ___  32
    *         +0      +32
    */
-  if (!(this.grid.cellsAvailable() || this.tileMatchesAvailable())) {return -200000;}
   var monoScore = 0; // monoticity score
   var traversals = this.game.buildTraversals({x: -1, y:  0});
   var prevValue = -1;
