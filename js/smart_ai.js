@@ -59,9 +59,9 @@ SmartAI.prototype.chooseBestMove2 = function(grid, numMoves) {
   var availableCells = grid.availableCells();
   if (availableCells <= 2) {
     numMoves += 6;
-  } else if (availableCells <= 4) {
-    numMoves += 4;
   } else if (availableCells <= 8) {
+    numMoves += 4;
+  } else if (availableCells <= 12) {
     numMoves += 2;
   }
   for (var d = 0; d < 4; d++) {
