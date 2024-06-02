@@ -54,7 +54,7 @@ SmartAI.prototype.nextMove = function() {
 };
 
 SmartAI.prototype.chooseBestMove2 = function(grid, numMoves) {
-  var value = -200000;
+  var value = -Infinity;
   var direction = -1;
   for (var d = 0; d < 4; d++) {
     var testGrid = grid.clone();
@@ -62,7 +62,7 @@ SmartAI.prototype.chooseBestMove2 = function(grid, numMoves) {
     if (!testGame.moveTiles(d)) {continue;}
     if (direction == -1) {direction = d;}
     var value2 = this.planAhead(testGrid, numMoves, -Infinity, Infinity, false);
-    if (value2 == -200000) {
+    if (value2 == -Infinity) {
       this.planAhead(testGrid, numMoves, -Infinity, Infinity, false, true);
     }
     if (value2 > value) {
