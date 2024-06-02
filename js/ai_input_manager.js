@@ -165,12 +165,41 @@ AIInputManager.prototype.nextMove = function() {
   this.prevStates.push(this.game.grid.serialize());
 }
 
+AIInputManager.prototype.nextMove2 = function() {
+  var self = this;
+  if (!this.ai)
+    this.setAIMode(this.mode);
+  var move = this.ai.nextMove();
+  this.emit("move", move);
+
+  // If the game is over, do a longer wait and start again.
+  if (this.game.over) {
+    // Update stats
+    this.updateStats();
+    // Wait a bit, then start a new game.
+    this.stopAI();
+    setTimeout(function() {
+      self.emit("restart");
+      self.startAI();
+    }, 5000);
+  } else if (this.speed == AISpeed.FULL && this.runningAI) {
+    // Call nextMove continuously when in full speed.
+    // Call this function again on a timeout so the browser
+    // has a chance to update the screen
+    setTimeout(this.nextMove2.bind(this));
+  }
+  if (this.prevStates.length >= this.stateBufferSize) {
+    this.prevStates.shift();
+  }
+  this.prevStates.push(this.game.grid.serialize());
+}
+
 AIInputManager.prototype.startAI = function() {
   this.runningAI = true;
   switch (this.speed) {
     case AISpeed.FULL:
       inputStarted = Date.now();
-      setTimeout(this.nextMove.bind(this));
+      setTimeout(this.nextMove2.bind(this));
       break;
     case AISpeed.FAST:
       this.aiID = setInterval(this.nextMove.bind(this), this.fastMoveTime);
