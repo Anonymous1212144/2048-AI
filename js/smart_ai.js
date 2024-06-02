@@ -187,16 +187,31 @@ SmartAI.prototype.gridQuality = function(grid) {
   var traversals = this.game.buildTraversals({x: -1, y:  0});
   var prevValue = -1;
   var incScore = 0, decScore = 0;
+  var emptyScore = 0;
+  var prevMerge = -1
+  var mergeScore = 0;
   
   var scoreCell = function(cell) {
     var tile = grid.cellContent(cell);
     var tileValue = (tile ? tile.value : 0);
-    incScore += tileValue;
-    if (tileValue <= prevValue || prevValue == -1) {
-      decScore += tileValue;
-      if (tileValue < prevValue) {
-        incScore -= prevValue;
+    if (tileValue == 0) {
+      emptyScore++;
+    } else {
+      if (prevMerge == tileValue) {
+        mergeScore += 1;
+        prevMerge = -1;
+      } else {
+        prevMerge = tileValue;
       }
+    }
+    if (prevValue == -1) {
+      prevValue = tileValue;
+      return;
+    }
+    if (tileValue > prevValue) {
+      incScore += Math.pow(tileValue, 4) - Math.pow(prevValue, 4);
+    } else {
+      decScore -= Math.pow(tileValue, 4) - Math.pow(prevValue, 4);
     }
     prevValue = tileValue;
   };
@@ -209,7 +224,7 @@ SmartAI.prototype.gridQuality = function(grid) {
     traversals.y.forEach(function (y) {
       scoreCell({ x: x, y: y });
     });
-    monoScore += Math.max(incScore, decScore);
+    monoScore += Math.min(incScore, decScore);
   });
   // Traverse each row
   traversals.y.forEach(function (y) {
@@ -219,15 +234,10 @@ SmartAI.prototype.gridQuality = function(grid) {
     traversals.x.forEach(function (x) {
       scoreCell({ x: x, y: y });
     });
-    monoScore += Math.max(incScore, decScore);
+    monoScore += Math.min(incScore, decScore);
   });
   
-  // Now look at number of empty cells. More empty cells = better.
-  var availableCells = grid.availableCells();
-  var emptyCellWeight = 8;
-  var emptyScore = availableCells.length * emptyCellWeight;
-  
-  var score = monoScore + emptyScore;
+  var score = 47*monoScore + 270*emptyScore + 700*mergeScore;
   return score;
 }
 
