@@ -58,12 +58,10 @@ SmartAI.prototype.chooseBestMove2 = function(grid, numMoves) {
   var direction = -1;
   var availableCells = grid.availableCells();
   //if (availableCells <= 0) {
-  //  numMoves += 8;
-  //} else if (availableCells <= 4) {
   //  numMoves += 6;
-  //} else if (availableCells <= 8) {
+  //} else if (availableCells <= 4) {
   //  numMoves += 4;
-  //} else if (availableCells <= 12) {
+  //} else if (availableCells <= 8) {
   //  numMoves += 2;
   //}
   for (var d = 0; d < 4; d++) {
@@ -98,6 +96,22 @@ SmartAI.prototype.planAhead = function(grid, numMoves, alpha, beta, maximizing) 
   } else {
     value = Infinity;
     for (var i = 0; i < availableCells.length; i++) {
+      
+      var hasAdjacentTile = false;
+      for (var d2 = 0; d2 < 4; d2++) {
+        var vector = testGame.getVector(d2);
+        var adjCell = {
+          x: availableCells[i].x + vector.x,
+          y: availableCells[i].y + vector.y,
+        };
+        if (testGrid.cellContent(adjCell)) {
+          hasAdjacentTile = true;
+          break;
+        }
+      }
+      if (!hasAdjacentTile)
+        continue;
+      
       var testGrid = grid.clone();
       var testGame = new GameController(testGrid);
       testGame.addTile(new Tile(availableCells[i], 2));
@@ -105,12 +119,12 @@ SmartAI.prototype.planAhead = function(grid, numMoves, alpha, beta, maximizing) 
       if (value < alpha) {break;}
       beta = Math.min(beta, value);
 
-      //testGrid = grid.clone();
-      //testGame = new GameController(testGrid);
-      //testGame.addTile(new Tile(availableCells[i], 4));
-      //value = Math.min(value, this.planAhead(testGrid, numMoves-1, alpha, beta, true));
-      //if (value < alpha) {break;}
-      //beta = Math.min(beta, value);
+      testGrid = grid.clone();
+      testGame = new GameController(testGrid);
+      testGame.addTile(new Tile(availableCells[i], 4));
+      value = Math.min(value, this.planAhead(testGrid, numMoves-1, alpha, beta, true));
+      if (value < alpha) {break;}
+      beta = Math.min(beta, value);
     }
     return value;
   }
