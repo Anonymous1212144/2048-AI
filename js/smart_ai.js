@@ -239,7 +239,7 @@ SmartAI.prototype.gridQuality = function(grid) {
     monoScore += Math.min(incScore, decScore);
   });
   
-  var score = 47*monoScore + 270*emptyScore + 700*mergeScore;
+  var score = -47*monoScore + 270*emptyScore + 700*mergeScore;
   return score;
 }
 
