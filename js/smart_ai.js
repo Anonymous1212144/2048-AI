@@ -50,20 +50,22 @@ SmartAI.prototype.nextMove = function() {
   //var bestResult = this.chooseBestMove(results, originalQuality);
   
   //return bestResult.direction;
-  return this.chooseBestMove2(this.game.grid, 5);
+  return this.chooseBestMove2(this.game.grid, 1);
 };
 
 SmartAI.prototype.chooseBestMove2 = function(grid, numMoves) {
   var value = -Infinity;
   var direction = -1;
   var availableCells = grid.availableCells();
-  //if (availableCells <= 2) {
-  //  numMoves += 6;
-  //} else if (availableCells <= 8) {
-  //  numMoves += 4;
-  //} else if (availableCells <= 12) {
-  //  numMoves += 2;
-  //}
+  if (availableCells <= 0) {
+    numMoves += 8;
+  } else if (availableCells <= 4) {
+    numMoves += 6;
+  } else if (availableCells <= 8) {
+    numMoves += 4;
+  } else if (availableCells <= 12) {
+    numMoves += 2;
+  }
   for (var d = 0; d < 4; d++) {
     var testGrid = grid.clone();
     var testGame = new GameController(testGrid);
