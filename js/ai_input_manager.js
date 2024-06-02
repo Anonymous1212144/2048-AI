@@ -134,6 +134,8 @@ AIInputManager.prototype.setTileGenerator = function(gen) {
   }
 }
 
+var inputStarted = 0;
+
 AIInputManager.prototype.nextMove = function() {
   var self = this;
   if (!this.ai)
@@ -151,6 +153,11 @@ AIInputManager.prototype.nextMove = function() {
       self.emit("restart");
       self.startAI();
     }, 5000);
+  } else if (this.speed == AISpeed.FULL && this.runningAI && inputStarted == Date.now()) {
+    // Call nextMove continuously when in full speed.
+    // Call this function again on a timeout so the browser
+    // has a chance to update the screen
+    setTimeout(this.nextMove.bind(this));
   }
   if (this.prevStates.length >= this.stateBufferSize) {
     this.prevStates.shift();
@@ -158,22 +165,12 @@ AIInputManager.prototype.nextMove = function() {
   this.prevStates.push(this.game.grid.serialize());
 }
 
-function fullSpeed() {
-  var start = Date.now();
-  while (Date.now() - start < 1 && !this.game.over) {
-    this.nextMove.bind(this);
-  }
-}
-
-AIInputManager.prototype.fullSpeed2 = function() {
-  this.nextMove.bind(this);
-}
-
 AIInputManager.prototype.startAI = function() {
   this.runningAI = true;
   switch (this.speed) {
     case AISpeed.FULL:
-      this.aiID = setInterval(this.fullSpeed2.bind(this), 1);
+      inputStarted = Date.now();
+      setTimeout(this.nextMove.bind(this));
       break;
     case AISpeed.FAST:
       this.aiID = setInterval(this.nextMove.bind(this), this.fastMoveTime);
