@@ -50,12 +50,20 @@ SmartAI.prototype.nextMove = function() {
   //var bestResult = this.chooseBestMove(results, originalQuality);
   
   //return bestResult.direction;
-  return this.chooseBestMove2(this.game.grid, 5);
+  return this.chooseBestMove2(this.game.grid, 3);
 };
 
 SmartAI.prototype.chooseBestMove2 = function(grid, numMoves) {
   var value = -Infinity;
   var direction = -1;
+  var availableCells = grid.availableCells();
+  if (availableCells <= 2) {
+    numMoves += 6;
+  } else if (availableCells <= 4) {
+    numMoves += 4;
+  } else if (availableCells <= 8) {
+    numMoves += 2;
+  }
   for (var d = 0; d < 4; d++) {
     var testGrid = grid.clone();
     var testGame = new GameController(testGrid);
@@ -70,13 +78,8 @@ SmartAI.prototype.chooseBestMove2 = function(grid, numMoves) {
   return direction;
 }
 
-SmartAI.prototype.planAhead = function(grid, numMoves, alpha, beta, maximizing, verbose=false) {
+SmartAI.prototype.planAhead = function(grid, numMoves, alpha, beta, maximizing) {
   var game = new GameController(grid);
-  if (verbose) {
-    console.log(grid);
-    console.log(game.movesAvailable());
-    console.log(this.gridQuality(grid));
-  }
   if (!game.movesAvailable() || numMoves == 0) {return this.gridQuality(grid);}
   var availableCells = grid.availableCells();
   if (maximizing) {
