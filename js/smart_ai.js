@@ -80,7 +80,7 @@ SmartAI.prototype.planAhead = function(grid, numMoves, alpha, beta, maximizing, 
     console.log(game.movesAvailable());
     console.log(this.gridQuality(grid));
   }
-  if (!game.movesAvailable()) {return -Infinity;}
+  if (!game.movesAvailable()) {return this.gridQuality(grid);}
   if (numMoves == 0) {return this.gridQuality(grid);}
   var availableCells = grid.availableCells();
   if (maximizing) {
@@ -335,8 +335,9 @@ SmartAI.prototype.gridQuality = function(grid) {
     monoScore += Math.min(incScore, decScore);
   });
 
-  if (emptyScore == 0 && mergeScore == 0) {return -Infinity;}
+  
   var score = -47*monoScore + 270*emptyScore + 700*mergeScore;
+  if (emptyScore == 0 && mergeScore == 0) {score -= 1e12;}
   return score;
 }
 
