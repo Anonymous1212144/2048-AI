@@ -153,7 +153,7 @@ AIInputManager.prototype.nextMove = function() {
       self.emit("restart");
       self.startAI();
     }, 5000);
-  } else if (this.speed == AISpeed.FULL && this.runningAI && inputStarted == Date.now()) {
+  } else if (this.speed == AISpeed.FULL && this.runningAI) {
     // Call nextMove continuously when in full speed.
     // Call this function again on a timeout so the browser
     // has a chance to update the screen
