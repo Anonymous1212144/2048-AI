@@ -80,7 +80,7 @@ SmartAI.prototype.planAhead = function(grid, numMoves, alpha, beta, maximizing) 
       var testGrid = grid.clone();
       var testGame = new GameController(testGrid);
       if (!testGame.moveTiles(d)) {continue;}
-      value = Math.max(value, this.planAhead(testGrid, numMoves-1, alpha, beta, maximizing, false));
+      value = Math.max(value, this.planAhead(testGrid, numMoves-1, alpha, beta, false));
       if (value > beta) {break;}
       alpha = Math.max(alpha, value);
     }
@@ -91,14 +91,14 @@ SmartAI.prototype.planAhead = function(grid, numMoves, alpha, beta, maximizing) 
       var testGrid = grid.clone();
       var testGame = new GameController(testGrid);
       testGame.addTile(new Tile(availableCells[i], 2));
-      value = Math.min(value, this.planAhead(testGrid, numMoves-1, alpha, beta, maximizing, true));
+      value = Math.min(value, this.planAhead(testGrid, numMoves-1, alpha, beta, true));
       if (value < alpha) {break;}
       beta = Math.min(beta, value);
 
       var testGrid = grid.clone();
       var testGame = new GameController(testGrid);
       testGame.addTile(new Tile(availableCells[i], 4));
-      value = Math.min(value, this.planAhead(testGrid, numMoves-1, alpha, beta, maximizing, true));
+      value = Math.min(value, this.planAhead(testGrid, numMoves-1, alpha, beta, true));
       if (value < alpha) {break;}
       beta = Math.min(beta, value);
     }
