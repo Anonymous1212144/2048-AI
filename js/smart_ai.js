@@ -62,6 +62,9 @@ SmartAI.prototype.chooseBestMove2 = function(grid, numMoves) {
     if (!testGame.moveTiles(d)) {continue;}
     if (direction == -1) {direction = d;}
     var value2 = this.planAhead(testGrid, 3, -200000, 200000, false);
+    if (value2 == -200000) {
+      this.planAhead(testGrid, 3, -200000, 200000, false, true);
+    }
     if (value2 > value) {
       direction = d;
       value = value2;
@@ -70,8 +73,13 @@ SmartAI.prototype.chooseBestMove2 = function(grid, numMoves) {
   return direction;
 }
 
-SmartAI.prototype.planAhead = function(grid, numMoves, alpha, beta, maximizing) {
+SmartAI.prototype.planAhead = function(grid, numMoves, alpha, beta, maximizing, verbose=false) {
   var game = new GameController(grid);
+  if (verbose) {
+    console.log(grid);
+    console.log(game.movesAvailable());
+    console.log(this.gridQuality(grid));
+  }
   if (!game.movesAvailable()) {return -200000;}
   if (numMoves == 0) {return this.gridQuality(grid);}
   var availableCells = grid.availableCells();
