@@ -1,5 +1,1 @@
-# 2048-AI
-A fork of [2048](http://gabrielecirulli.github.io/2048/)
-
-Made just for fun. [Play it here!](http://aj-r.github.io/2048-AI/)
-
+This is just a fork where I tested some ways to speed up the program. You can watch it here (the only speed affected should be "full"): https://anonymous1212144.github.io/2048-AI/
